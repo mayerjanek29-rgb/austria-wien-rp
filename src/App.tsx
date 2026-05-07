@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function FiveMWebsite() {
-  const [page, setPage] = useState<any>("home");
+  const [page, setPage] = useState("home");
 
   // TRUE = Wartungsarbeiten / Team Only
   // FALSE = Öffentlicher Server
@@ -13,14 +13,14 @@ export default function FiveMWebsite() {
     uptime: "Live",
   });
 
-  const [rulesAccepted, setRulesAccepted] = useState<Record<string, boolean>>({
+  const [rulesAccepted, setRulesAccepted] = useState({
     rule1: false,
     rule2: false,
     rule3: false,
     rule4: false,
   });
 
-  const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({
+  const [quizAnswers, setQuizAnswers] = useState({
     q1: "",
     q2: "",
     q3: "",
@@ -39,36 +39,8 @@ export default function FiveMWebsite() {
     quizAnswers.q6 === "nein" &&
     allRulesAccepted;
 
-  useEffect(() => {
-    async function loadServerStatus() {
-      try {
-        // Wenn ihr eine richtige FiveM Status API habt, hier die URL einfügen.
-        // Beispiel: https://deine-api.de/status
-        const res = await fetch(
-          "https://api.allorigins.win/raw?url=https://servers-frontend.fivem.net/api/servers/single/GMXDKQ"
-        );
-        const data = await res.json();
-
-        setServerData({
-          online: true,
-          players: data?.Data?.clients ?? 0,
-          maxPlayers: data?.Data?.sv_maxclients ?? 64,
-          uptime: "Live",
-        });
-      } catch (error) {
-        setServerData({
-          online: false,
-          players: 0,
-          maxPlayers: 64,
-          uptime: "Live",
-        });
-      }
-    }
-
-    loadServerStatus();
-    const interval = setInterval(loadServerStatus, 60000);
-    return () => clearInterval(interval);
-  }, []);
+  // Live-Status API wurde deaktiviert, damit Vercel keine 403-Fehler mehr zeigt.
+  // Status wird aktuell manuell über maintenanceMode gesteuert.
 
   if (page === "rules") {
     return (
@@ -600,7 +572,7 @@ export default function FiveMWebsite() {
                 },
               ].map((item, i) => (
                 <div
-                  key={i}
+                  key={item}
                   className="bg-zinc-900 rounded-3xl overflow-hidden shadow-xl hover:scale-105 transition"
                 >
                   <img
